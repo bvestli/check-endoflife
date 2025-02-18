@@ -1,0 +1,9 @@
+products:
+  - name: traefik
+    version: 2.11.3
+  - name: grafana
+    version: 10.4.14
+  - name: prometheus
+    version: 3.0.1
+  - name: argo-cd
+    version: v2.5.21+f627b62
