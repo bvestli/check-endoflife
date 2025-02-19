@@ -29,20 +29,20 @@ type Product struct {
 	LastestCycle  string `json:"latestcycle"`            // Latest release cycle. string
 }
 
-func PrintProductJSON(product_name string, product_version string) (string, error) {
+func FullProductData(product_name string, product_version string) (Product, error) {
 	cycle_data, err := GetSingleCycle(product_name, product_version)
 	if err != nil {
-		return "", err
+		return Product{}, err
 	}
 
 	latestCycle, err := GetLatestCycle(product_name)
 	if err != nil {
-		return "", err
+		return Product{}, err
 	}
 
 	cycle_data.LastestCycle = latestCycle
 
-	return PrettyPrintJSON(cycle_data), nil
+	return cycle_data, nil
 }
 
 func GetSingleCycle(product_name string, product_version string) (Product, error) {
@@ -136,10 +136,4 @@ func GetLatestCycle(product_name string) (string, error) {
 	latestCycle := vs[len(vs)-1].Original()
 
 	return latestCycle, nil
-}
-
-func PrettyPrintJSON(i interface{}) string {
-	s, _ := json.MarshalIndent(i, "", "  ")
-
-	return string(s)
 }
