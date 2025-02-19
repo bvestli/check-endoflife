@@ -125,7 +125,7 @@ func GetLatestCycle(product_name string) (string, error) {
 	for i, r := range cycles {
 		v, err := semver.NewVersion(r)
 		if err != nil {
-			fmt.Errorf("Error parsing version: %s", err)
+			return "", fmt.Errorf("Error parsing version: %s", err)
 		}
 
 		vs[i] = v
