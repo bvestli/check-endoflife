@@ -1,0 +1,7 @@
+products:
+  - name: "product1"
+    version: "1.0"
+  - name: "product2"
+    version: "2.0"
+  - name: "product3"
+    version: "3.0"
