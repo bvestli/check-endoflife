@@ -1,7 +1,6 @@
 package utils_test
 
 import (
-	"strings"
 	"testing"
 
 	"github.com/bvestli/check_endoflife/product"
@@ -16,7 +15,7 @@ func TestPrettyPrintJSON(t *testing.T) {
 			ReleaseDate:   "29.04.2025",
 			EndOfLifeDate: "2.11.20",
 			Latest:        "2025-04-29",
-			Link:          "",
+			Link:          "https://example.com",
 			Support:       "2.11.3",
 			Discontinued:  "3.3",
 			MyVersion:     "1.0",
@@ -45,6 +44,7 @@ func TestPrettyPrintJSON(t *testing.T) {
     "releaseDate": "29.04.2025",
     "eol": "2.11.20",
     "latest": "2025-04-29",
+    "link": "https://example.com",
     "support": "2.11.3",
     "discontinued": "3.3",
     "myversion": "1.0",
@@ -64,7 +64,7 @@ func TestPrettyPrintJSON(t *testing.T) {
 ]`
 
 	if result != expected {
-		t.Errorf("Expected: %s\nGot: %s", strings.TrimSpace(expected), strings.TrimSpace(result))
+		t.Errorf("Expected: %s\nGot: %s", expected, result)
 	}
 
 }
