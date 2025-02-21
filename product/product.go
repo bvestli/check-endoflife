@@ -13,10 +13,13 @@ import (
 )
 
 // date time format layout
-const YYYYMMDD = "2006-01-02" // YYYYMMDD
-const DDMMYYYY = "02.01.2006" // DDMMYYYY
+// YYYYMMDD
+const YYYYMMDD = "2006-01-02"
 
-// Define the structure of the product data
+// DDMMYYYY
+const DDMMYYYY = "02.01.2006"
+
+// Product defines the structure of the product data received from the API
 type Product struct {
 	Name          string `json:"name"`                   // Product name. string
 	Cycle         string `json:"cycle,omitempty"`        // Release cycle version. string
@@ -30,9 +33,9 @@ type Product struct {
 	LastestCycle  string `json:"latestcycle"`            // Latest release cycle. string
 }
 
-// Get the full product data
+// FullProductData returns the full product data
 func FullProductData(productName string, productVersion string) (Product, error) {
-	cycle_data, err := GetSingleCycle(productName, productVersion)
+	cycleData, err := GetSingleCycle(productName, productVersion)
 	if err != nil {
 		return Product{}, err
 	}
@@ -44,12 +47,12 @@ func FullProductData(productName string, productVersion string) (Product, error)
 
 	cycle_data.LastestCycle = latestCycle
 
-	return cycle_data, nil
+	return cycleData, nil
 }
 
-// Get the single cycle data
+// GetSingleCycle returns the single cycle for a product
 func GetSingleCycle(productName string, productVersion string) (Product, error) {
-	api_url := "https://endoflife.date/api/"
+	apiURL := "https://endoflife.date/api/"
 
 	version, err := semver.NewVersion(productVersion)
 	if err != nil {
@@ -58,7 +61,7 @@ func GetSingleCycle(productName string, productVersion string) (Product, error) 
 
 	versionMajorMinor := fmt.Sprintf("%d.%d", version.Major(), version.Minor())
 
-	resp, err := http.Get(api_url + productName + "/" + versionMajorMinor + ".json")
+	resp, err := http.Get(apiURL + productName + "/" + versionMajorMinor + ".json")
 	if err != nil {
 		return Product{}, err
 	}
@@ -99,10 +102,11 @@ func GetSingleCycle(productName string, productVersion string) (Product, error) 
 	return releaseCycle, nil
 }
 
+// GetLatestCycle returns the latest cycle for a product
 func GetLatestCycle(productName string) (string, error) {
-	api_url := "https://endoflife.date/api/"
+	apiURL := "https://endoflife.date/api/"
 
-	resp, err := http.Get(api_url + productName + ".json")
+	resp, err := http.Get(apiURL + productName + ".json")
 	if err != nil {
 		return "", err
 	}
