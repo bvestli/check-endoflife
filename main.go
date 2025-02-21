@@ -10,22 +10,22 @@ import (
 )
 
 func main() {
-	product_names, err := utils.GetProductsFromFile("products.yaml")
+	productNames, err := utils.GetProductsFromFile("products.yaml")
 	if err != nil {
 		log.Fatal(err)
 		os.Exit(1)
 	}
 
-	var product_data []product.Product
-	for product_name, product_version := range product_names {
-		single_product_data, err := product.FullProductData(product_name, product_version)
+	var productData []product.Product
+	for productName, productVersion := range productNames {
+		singleProductData, err := product.FullProductData(productName, productVersion)
 		if err != nil {
 			log.Fatal(err)
 			os.Exit(1)
 		}
 
-		product_data = append(product_data, single_product_data)
+		productData = append(productData, singleProductData)
 	}
 
-	fmt.Println(utils.PrettyPrintJSON(product_data))
+	fmt.Println(utils.PrettyPrintJSON(productData))
 }

@@ -13,9 +13,10 @@ import (
 )
 
 // date time format layout
-const YYYYMMDD = "2006-01-02"
-const DDMMYYYY = "02.01.2006"
+const YYYYMMDD = "2006-01-02" // YYYYMMDD
+const DDMMYYYY = "02.01.2006" // DDMMYYYY
 
+// Define the structure of the product data
 type Product struct {
 	Name          string `json:"name"`                   // Product name. string
 	Cycle         string `json:"cycle,omitempty"`        // Release cycle version. string
@@ -29,13 +30,14 @@ type Product struct {
 	LastestCycle  string `json:"latestcycle"`            // Latest release cycle. string
 }
 
-func FullProductData(product_name string, product_version string) (Product, error) {
-	cycle_data, err := GetSingleCycle(product_name, product_version)
+// Get the full product data
+func FullProductData(productName string, productVersion string) (Product, error) {
+	cycle_data, err := GetSingleCycle(productName, productVersion)
 	if err != nil {
 		return Product{}, err
 	}
 
-	latestCycle, err := GetLatestCycle(product_name)
+	latestCycle, err := GetLatestCycle(productName)
 	if err != nil {
 		return Product{}, err
 	}
@@ -45,17 +47,18 @@ func FullProductData(product_name string, product_version string) (Product, erro
 	return cycle_data, nil
 }
 
-func GetSingleCycle(product_name string, product_version string) (Product, error) {
+// Get the single cycle data
+func GetSingleCycle(productName string, productVersion string) (Product, error) {
 	api_url := "https://endoflife.date/api/"
 
-	version, err := semver.NewVersion(product_version)
+	version, err := semver.NewVersion(productVersion)
 	if err != nil {
 		return Product{}, err
 	}
 
 	versionMajorMinor := fmt.Sprintf("%d.%d", version.Major(), version.Minor())
 
-	resp, err := http.Get(api_url + product_name + "/" + versionMajorMinor + ".json")
+	resp, err := http.Get(api_url + productName + "/" + versionMajorMinor + ".json")
 	if err != nil {
 		return Product{}, err
 	}
@@ -66,40 +69,40 @@ func GetSingleCycle(product_name string, product_version string) (Product, error
 		return Product{}, err
 	}
 
-	var release_cycle Product
-	err = json.Unmarshal(body, &release_cycle)
+	var releaseCycle Product
+	err = json.Unmarshal(body, &releaseCycle)
 	if err != nil {
 		return Product{}, err
 	}
 
-	release_cycle.Name = product_name
-	release_cycle.MyVersion = product_version
+	releaseCycle.Name = productName
+	releaseCycle.MyVersion = productVersion
 
-	if utils.TypeofObject(release_cycle.EndOfLifeDate) == "boolean" {
-		if release_cycle.EndOfLifeDate.(bool) {
-			release_cycle.EndOfLifeDate = "Discontinued."
+	if utils.TypeofObject(releaseCycle.EndOfLifeDate) == "boolean" {
+		if releaseCycle.EndOfLifeDate.(bool) {
+			releaseCycle.EndOfLifeDate = "Discontinued."
 		} else {
-			release_cycle.EndOfLifeDate = "Supported."
+			releaseCycle.EndOfLifeDate = "Supported."
 		}
-	} else if utils.TypeofObject(release_cycle.EndOfLifeDate) == "string" {
+	} else if utils.TypeofObject(releaseCycle.EndOfLifeDate) == "string" {
 
-		t, err := time.Parse(YYYYMMDD, release_cycle.EndOfLifeDate.(string))
+		t, err := time.Parse(YYYYMMDD, releaseCycle.EndOfLifeDate.(string))
 		if err != nil {
 			return Product{}, err
 		}
 
-		release_cycle.EndOfLifeDate = t.Format(DDMMYYYY)
+		releaseCycle.EndOfLifeDate = t.Format(DDMMYYYY)
 	} else {
-		release_cycle.EndOfLifeDate = "Unknown"
+		releaseCycle.EndOfLifeDate = "Unknown"
 	}
 
-	return release_cycle, nil
+	return releaseCycle, nil
 }
 
-func GetLatestCycle(product_name string) (string, error) {
+func GetLatestCycle(productName string) (string, error) {
 	api_url := "https://endoflife.date/api/"
 
-	resp, err := http.Get(api_url + product_name + ".json")
+	resp, err := http.Get(api_url + productName + ".json")
 	if err != nil {
 		return "", err
 	}
