@@ -12,11 +12,10 @@ import (
 	"github.com/bvestli/check_endoflife/utils"
 )
 
-// date time format layout
-// YYYYMMDD
+// YYYYMMDD date time format layout
 const YYYYMMDD = "2006-01-02"
 
-// DDMMYYYY
+// DDMMYYYY date time format layout
 const DDMMYYYY = "02.01.2006"
 
 // Product defines the structure of the product data received from the API
@@ -45,7 +44,7 @@ func FullProductData(productName string, productVersion string) (Product, error)
 		return Product{}, err
 	}
 
-	cycle_data.LastestCycle = latestCycle
+	cycleData.LastestCycle = latestCycle
 
 	return cycleData, nil
 }
