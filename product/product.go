@@ -12,11 +12,8 @@ import (
 	"github.com/bvestli/check_endoflife/utils"
 )
 
-// YYYYMMDD date time format layout
-const YYYYMMDD = "2006-01-02"
-
-// DDMMYYYY date time format layout
-const DDMMYYYY = "02.01.2006"
+// dateFormat date time format layout for the endoflife API and for the output
+const dateFormat = "2006-01-02"
 
 // Product defines the structure of the product data received from the API
 type Product struct {
@@ -88,12 +85,12 @@ func GetSingleCycle(productName string, productVersion string) (Product, error) 
 		}
 	} else if utils.TypeofObject(releaseCycle.EndOfLifeDate) == "string" {
 
-		t, err := time.Parse(YYYYMMDD, releaseCycle.EndOfLifeDate.(string))
+		t, err := time.Parse(dateFormat, releaseCycle.EndOfLifeDate.(string))
 		if err != nil {
 			return Product{}, err
 		}
 
-		releaseCycle.EndOfLifeDate = t.Format(DDMMYYYY)
+		releaseCycle.EndOfLifeDate = t.Format(dateFormat)
 	} else {
 		releaseCycle.EndOfLifeDate = "Unknown"
 	}
